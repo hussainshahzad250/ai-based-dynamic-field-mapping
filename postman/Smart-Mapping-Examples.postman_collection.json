@@ -1,0 +1,219 @@
+{
+  "info": {
+    "name": "Smart Mapping - Large JSON Examples",
+    "description": "Intelligent field matching for JSONs with 100+ fields",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "aiServiceUrl",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "engineUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "adminApiKey",
+      "value": "admin-secret-key"
+    }
+  ],
+  "item": [
+    {
+      "name": "Smart Mapping APIs",
+      "item": [
+        {
+          "name": "Generate Smart Mapping (Small Example)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{aiServiceUrl}}/api/smart-mapping/generate",
+              "host": ["{{aiServiceUrl}}"],
+              "path": ["api", "smart-mapping", "generate"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"partnerId\": \"smart-test\",\n  \"partnerSample\": \"{\\\"userId\\\": \\\"U123\\\", \\\"userName\\\": \\\"john doe\\\", \\\"userEmail\\\": \\\"john@example.com\\\", \\\"accountBalance\\\": 100.50, \\\"createdDate\\\": \\\"2024-03-10\\\"}\",\n  \"internalSample\": \"{\\\"customerId\\\": \\\"U123\\\", \\\"customerName\\\": \\\"JOHN DOE\\\", \\\"emailAddress\\\": \\\"john@example.com\\\", \\\"balance\\\": 10050, \\\"registrationDate\\\": \\\"2024-03-10T00:00:00Z\\\"}\",\n  \"createdBy\": \"admin@example.com\"\n}"
+            },
+            "description": "Generate mappings using intelligent field matching"
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Smart Mapping (Large Example - 25 Fields)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{aiServiceUrl}}/api/smart-mapping/generate",
+              "host": ["{{aiServiceUrl}}"],
+              "path": ["api", "smart-mapping", "generate"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"partnerId\": \"large-partner\",\n  \"partnerSample\": \"{\\\"account\\\": {\\\"accountId\\\": \\\"ACC123\\\", \\\"accountHolder\\\": \\\"john doe\\\", \\\"accountBalance\\\": 1000.50, \\\"accountStatus\\\": \\\"active\\\", \\\"accountType\\\": \\\"savings\\\", \\\"createdDate\\\": \\\"2024-01-15\\\", \\\"lastModified\\\": \\\"2024-03-10 10:30:00\\\", \\\"branch\\\": \\\"NYC001\\\"}, \\\"transactions\\\": [{\\\"txnId\\\": \\\"TXN001\\\", \\\"txnAmount\\\": 50.25, \\\"txnType\\\": \\\"debit\\\", \\\"txnDate\\\": \\\"2024-03-10\\\", \\\"txnDescription\\\": \\\"Payment\\\"}], \\\"contact\\\": {\\\"email\\\": \\\"john@example.com\\\", \\\"phone\\\": \\\"+1234567890\\\", \\\"address\\\": {\\\"street\\\": \\\"123 Main St\\\", \\\"city\\\": \\\"New York\\\", \\\"zipCode\\\": \\\"10001\\\"}}}\",\n  \"internalSample\": \"{\\\"customer\\\": {\\\"customerId\\\": \\\"ACC123\\\", \\\"customerName\\\": \\\"JOHN DOE\\\", \\\"balance\\\": 100050, \\\"status\\\": \\\"ACTIVE\\\", \\\"type\\\": \\\"SAVINGS\\\", \\\"registrationDate\\\": \\\"2024-01-15T00:00:00Z\\\", \\\"lastUpdate\\\": \\\"2024-03-10T10:30:00Z\\\", \\\"branchCode\\\": \\\"NYC001\\\"}, \\\"payments\\\": [{\\\"paymentId\\\": \\\"TXN001\\\", \\\"amount\\\": 5025, \\\"type\\\": \\\"DEBIT\\\", \\\"timestamp\\\": \\\"2024-03-10T00:00:00Z\\\", \\\"description\\\": \\\"Payment\\\"}], \\\"contactInfo\\\": {\\\"emailAddress\\\": \\\"john@example.com\\\", \\\"phoneNumber\\\": \\\"+1234567890\\\", \\\"mailingAddress\\\": {\\\"streetAddress\\\": \\\"123 Main St\\\", \\\"cityName\\\": \\\"New York\\\", \\\"postalCode\\\": \\\"10001\\\"}}}\",\n  \"createdBy\": \"admin@example.com\"\n}"
+            },
+            "description": "Generate mappings for large JSON with 25+ fields"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Complete Workflow - Large JSON",
+      "item": [
+        {
+          "name": "1. Generate Smart Mapping",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Mappings generated\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.mappings).to.be.an('array');",
+                  "    pm.expect(jsonData.mappings.length).to.be.above(10);",
+                  "    console.log('Generated ' + jsonData.mappings.length + ' mappings');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{aiServiceUrl}}/api/smart-mapping/generate",
+              "host": ["{{aiServiceUrl}}"],
+              "path": ["api", "smart-mapping", "generate"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"partnerId\": \"workflow-test\",\n  \"partnerSample\": \"{\\\"account\\\": {\\\"accountId\\\": \\\"ACC123\\\", \\\"accountHolder\\\": \\\"john doe\\\", \\\"accountBalance\\\": 1000.50, \\\"accountStatus\\\": \\\"active\\\", \\\"createdDate\\\": \\\"2024-01-15\\\"}, \\\"contact\\\": {\\\"email\\\": \\\"john@example.com\\\", \\\"phone\\\": \\\"+1234567890\\\"}}\",\n  \"internalSample\": \"{\\\"customer\\\": {\\\"customerId\\\": \\\"ACC123\\\", \\\"customerName\\\": \\\"JOHN DOE\\\", \\\"balance\\\": 100050, \\\"status\\\": \\\"ACTIVE\\\", \\\"registrationDate\\\": \\\"2024-01-15T00:00:00Z\\\"}, \\\"contactInfo\\\": {\\\"emailAddress\\\": \\\"john@example.com\\\", \\\"phoneNumber\\\": \\\"+1234567890\\\"}}\",\n  \"createdBy\": \"admin@example.com\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Activate Mapping",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Admin-Key",
+                "value": "{{adminApiKey}}"
+              }
+            ],
+            "url": {
+              "raw": "{{aiServiceUrl}}/api/admin/mapping/workflow-test/status",
+              "host": ["{{aiServiceUrl}}"],
+              "path": ["api", "admin", "mapping", "workflow-test", "status"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"ACTIVE\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Transform Data",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{engineUrl}}/api/transform/workflow-test",
+              "host": ["{{engineUrl}}"],
+              "path": ["api", "transform", "workflow-test"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"account\": {\n    \"accountId\": \"ACC123\",\n    \"accountHolder\": \"john doe\",\n    \"accountBalance\": 1000.50,\n    \"accountStatus\": \"active\",\n    \"createdDate\": \"2024-01-15\"\n  },\n  \"contact\": {\n    \"email\": \"john@example.com\",\n    \"phone\": \"+1234567890\"\n  }\n}"
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Comparison Tests",
+      "item": [
+        {
+          "name": "AI Mapping (Slow, Accurate)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{aiServiceUrl}}/api/ai-mapping/generate",
+              "host": ["{{aiServiceUrl}}"],
+              "path": ["api", "ai-mapping", "generate"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"partnerId\": \"ai-test\",\n  \"partnerSample\": \"{\\\"userId\\\": \\\"U123\\\", \\\"userName\\\": \\\"john\\\"}\",\n  \"internalSample\": \"{\\\"customerId\\\": \\\"U123\\\", \\\"customerName\\\": \\\"JOHN\\\"}\",\n  \"createdBy\": \"admin\"\n}"
+            },
+            "description": "Uses AI (Ollama/OpenAI) - slower but more accurate"
+          },
+          "response": []
+        },
+        {
+          "name": "Smart Mapping (Fast, Good)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{aiServiceUrl}}/api/smart-mapping/generate",
+              "host": ["{{aiServiceUrl}}"],
+              "path": ["api", "smart-mapping", "generate"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"partnerId\": \"smart-test\",\n  \"partnerSample\": \"{\\\"userId\\\": \\\"U123\\\", \\\"userName\\\": \\\"john\\\"}\",\n  \"internalSample\": \"{\\\"customerId\\\": \\\"U123\\\", \\\"customerName\\\": \\\"JOHN\\\"}\",\n  \"createdBy\": \"admin\"\n}"
+            },
+            "description": "Uses intelligent matching - faster, no AI needed"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

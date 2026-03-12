@@ -1,0 +1,38 @@
+{
+  "partnerId": "partner-a",
+  "version": "1.0",
+  "mappings": [
+    {
+      "targetPath": "customer.id",
+      "sourcePath": "$.client.clientId"
+    },
+    {
+      "targetPath": "customer.name",
+      "sourcePath": "$.client.fullName",
+      "transformationType": "uppercase"
+    },
+    {
+      "targetPath": "transaction.amount",
+      "sourcePath": "$.payment.value",
+      "transformationType": "multiply",
+      "transformationConfig": {
+        "factor": 100
+      }
+    },
+    {
+      "targetPath": "transaction.currency",
+      "sourcePath": "$.payment.curr",
+      "defaultValue": "USD"
+    },
+    {
+      "targetPath": "transaction.date",
+      "sourcePath": "$.payment.timestamp",
+      "transformationType": "dateFormat",
+      "transformationConfig": {
+        "inputFormat": "yyyy-MM-dd HH:mm:ss",
+
+        "outputFormat": "yyyy-MM-dd HH:mm:ss"
+      }
+    }
+  ]
+}

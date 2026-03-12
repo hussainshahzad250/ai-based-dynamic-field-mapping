@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+mapping:
+  config-path: classpath:mappings/
+
+ai:
+  # Options: openai, ollama, anthropic
+  provider: ${AI_PROVIDER:ollama}
+  api-key: ${AI_API_KEY:}
+  model: ${AI_MODEL:llama3.2}
+  # Ollama: http://localhost:11434/api/generate
+  # OpenAI: https://api.openai.com/v1/chat/completions
+  # Anthropic: https://api.anthropic.com/v1/messages
+  endpoint: ${AI_ENDPOINT:http://localhost:11434/api/generate}
