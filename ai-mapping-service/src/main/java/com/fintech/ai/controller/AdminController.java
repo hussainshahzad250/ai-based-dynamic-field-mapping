@@ -32,11 +32,11 @@ public class AdminController {
             @PathVariable String partnerId,
             @Valid @RequestBody MappingConfig config,
             @RequestHeader("X-Admin-Key") String apiKey) {
-        if (!validateAdminKey(apiKey)) {
+        if (!ValidationUtils.validateAdminKey(apiKey,adminApiKey)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         config.setPartnerId(partnerId);
-//        config.setUpdatedAt(LocalDateTime.now());
+        config.setUpdatedAt(LocalDateTime.now());
         cacheService.cacheMapping(partnerId, config);
         return ResponseEntity.ok(config);
     }
@@ -46,7 +46,7 @@ public class AdminController {
             @PathVariable String partnerId,
             @Valid @RequestBody UpdateStatusRequest request,
             @RequestHeader("X-Admin-Key") String apiKey) {
-        if (!validateAdminKey(apiKey)) {
+        if (!ValidationUtils.validateAdminKey(apiKey,adminApiKey)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         MappingConfig config = cacheService.getMapping(partnerId);
@@ -63,7 +63,7 @@ public class AdminController {
     public ResponseEntity<Void> deleteMapping(
             @PathVariable String partnerId,
             @RequestHeader("X-Admin-Key") String apiKey) {
-        if (!validateAdminKey(apiKey)) {
+        if (!ValidationUtils.validateAdminKey(apiKey,adminApiKey)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         cacheService.invalidateMapping(partnerId);
@@ -72,7 +72,7 @@ public class AdminController {
 
     @GetMapping("/mappings")
     public ResponseEntity<Set<String>> listAllPartners(@RequestHeader("X-Admin-Key") String apiKey) {
-        if (!validateAdminKey(apiKey)) {
+        if (!ValidationUtils.validateAdminKey(apiKey,adminApiKey)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         Set<String> partners = cacheService.getAllPartnerIds();
@@ -81,7 +81,7 @@ public class AdminController {
 
     @PostMapping("/cache/clear/mappings")
     public ResponseEntity<Map<String, String>> clearMappingCache(@RequestHeader("X-Admin-Key") String apiKey) {
-        if (!validateAdminKey(apiKey)) {
+        if (!ValidationUtils.validateAdminKey(apiKey,adminApiKey)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         cacheService.clearAllMappings();
@@ -90,7 +90,7 @@ public class AdminController {
 
     @PostMapping("/cache/clear/ai-responses")
     public ResponseEntity<Map<String, String>> clearAICache(@RequestHeader("X-Admin-Key") String apiKey) {
-        if (!validateAdminKey(apiKey)) {
+        if (!ValidationUtils.validateAdminKey(apiKey,adminApiKey)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         cacheService.clearAllAIResponses();
